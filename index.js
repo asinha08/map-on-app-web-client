@@ -146,4 +146,6 @@ MapOnAppWebClient.prototype.setUp = function () {
 	}
 };
 
-module.exports = MapOnAppWebClient;
+export {
+	MapOnAppWebClient
+};
