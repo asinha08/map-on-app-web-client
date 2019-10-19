@@ -23,11 +23,12 @@ window.isMapOnAppResourcesLoaded = false;
  */
 function MapOnAppWebClient(container, token, checkBrowserLocation, baseURL) {
 	if (!container) {
-		console.log(MapOnAppWebClient.Error + "container is required");
+		console.log(this.Error + "container is required");
 	}
 	if (!token) {
-		console.log(MapOnAppWebClient.Error + "ERROR: token is required");
+		console.log(this.Error + "ERROR: token is required");
 	}
+	this.Error = "MapOnApp ERROR: ";
 	this.checkBrowserLocation = checkBrowserLocation;
 	this.baseURL = baseURL || "https://maponapp.com/";
 	this.token = token;
@@ -39,12 +40,10 @@ function MapOnAppWebClient(container, token, checkBrowserLocation, baseURL) {
 	}
 }
 
-MapOnAppWebClient.Error = "MapOnApp ERROR: ";
-
 MapOnAppWebClient.prototype.createLineLayer = function (params, layerId) {
 	var id = layerId || 'layer_' + (++this.counter);
 	if (this.layers[id]) {
-		console.error(MapOnAppWebClient.Error + id + ", layer was already added on map");
+		console.error(this.Error + id + ", layer was already added on map");
 		return;
 	}
 	if (!params) {
@@ -146,6 +145,4 @@ MapOnAppWebClient.prototype.setUp = function () {
 	}
 };
 
-export {
-	MapOnAppWebClient
-};
+export default MapOnAppWebClient;
