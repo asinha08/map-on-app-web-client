@@ -1,0 +1,28 @@
+{
+  "name": "map-on-app-web-client",
+  "version": "1.0.0",
+  "description": "This NPM Module will help you to intergate MapOnApp in your web application",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/asinha08/map-on-app-web-client.git"
+  },
+  "keywords": [
+    "Map",
+    "Map",
+    "in",
+    "browser"
+  ],
+  "author": "Ashish Kumar Sinha <ashish_sinha08@yahoo.co.in>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/asinha08/map-on-app-web-client/issues"
+  },
+  "homepage": "https://github.com/asinha08/map-on-app-web-client#readme"
+}
