@@ -21,15 +21,19 @@ let isMapOnAppResourcesLoaded = false;
  * // => null
  *
  */
+
 function MapOnAppWebClient(container, token, checkBrowserLocation, baseURL) {
+	this.Error = "MapOnApp ERROR: ";
 	if (!container) {
 		console.log(this.Error + "container is required");
 	}
 	if (!token) {
 		console.log(this.Error + "ERROR: token is required");
 	}
-	this.Error = "MapOnApp ERROR: ";
-	this.checkBrowserLocation = checkBrowserLocation;
+	if (checkBrowserLocation === undefined) {
+		console.warn()
+	}
+	this.checkBrowserLocation = checkBrowserLocation || false;
 	this.baseURL = baseURL || "https://maponapp.com/";
 	this.token = token;
 	this.contains = container;
@@ -37,6 +41,8 @@ function MapOnAppWebClient(container, token, checkBrowserLocation, baseURL) {
 	this.layers = {};
 	if (!isMapOnAppResourcesLoaded) {
 		this.setUp();
+	} else {
+		this.loadMap();
 	}
 }
 
@@ -54,7 +60,7 @@ MapOnAppWebClient.prototype.createLineLayer = function (params, layerId) {
 		lineColor = params.lineColor || "#ff0000",
 		lineWidth = params.lineWidth || 2,
 		lineCap = params.lineCap || "round";
-	if(!Array.isArray(coordinates)) {
+	if (!Array.isArray(coordinates)) {
 		console.error("ERROR: coordinates is not an array");
 	}
 	this.map.addLayer({
