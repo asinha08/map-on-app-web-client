@@ -1,6 +1,6 @@
 {
   "name": "map-on-app-web-client",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "This NPM Module will help you to intergate MapOnApp in your web application",
   "main": "index.js",
   "directories": {
@@ -8,7 +8,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "npmPush": "npm publish --access public"
+    "npmPublish": "npm publish --access public"
   },
   "repository": {
     "type": "git",
