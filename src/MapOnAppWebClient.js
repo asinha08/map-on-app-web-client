@@ -22,7 +22,7 @@ let isMapOnAppResourcesLoaded = false;
  *
  */
 
-function MapOnAppWebClient(container, token, checkBrowserLocation, baseURL) {
+function MapOnAppWebClient(container, token, checkBrowserLocation, baseURL = "http://localhost:2000/") {
 	this.Error = "MapOnApp ERROR: ";
 	if (!container) {
 		console.log(this.Error + "container is required");
@@ -39,17 +39,38 @@ function MapOnAppWebClient(container, token, checkBrowserLocation, baseURL) {
 	this.contains = container;
 	this.counter = 0;
 	this.layers = {};
+	this.layerData = {};
 	if (!isMapOnAppResourcesLoaded) {
 		this.setUp();
 	} else {
 		this.loadMap();
 	}
 }
+MapOnAppWebClient.prototype.pushCoordinatesToLineLayer = function (coordinates, layerId) {
+	if(!Array.isArray(coordinates)) {
+		console.error(this.Error + "coordinates is not a valid array");
+		return;
+	}
+	layerId = layerId || 'layer_' + (++this.counter);
+	if (!this.layers[layerId]) {
+		this.createLineLayer(null, layerId);
+	}
+	let source = this.map.getSource(layerId);
+	this.layers[layerId].push(coordinates);
+	source.setData({
+		geometry: {
+			coordinates: this.layers[layerId],
+			type: "LineString"
+		},
+		type: "Feature"
+	});
+	//console.log(layer);
+};
 
 MapOnAppWebClient.prototype.createLineLayer = function (params, layerId) {
-	var id = layerId || 'layer_' + (++this.counter);
-	if (this.layers[id]) {
-		console.error(this.Error + id + ", layer was already added on map");
+	layerId = layerId || 'layer_' + (++this.counter);
+	if (this.layers[layerId]) {
+		console.error(this.Error + layerId + ", layer was already added on map");
 		return;
 	}
 	if (!params) {
@@ -60,11 +81,12 @@ MapOnAppWebClient.prototype.createLineLayer = function (params, layerId) {
 		lineColor = params.lineColor || "#ff0000",
 		lineWidth = params.lineWidth || 2,
 		lineCap = params.lineCap || "round";
-	if (!Array.isArray(coordinates)) {
+	if (coordinates && !Array.isArray(coordinates)) {
 		console.error("ERROR: coordinates is not an array");
 	}
+	coordinates = coordinates || [];
 	this.map.addLayer({
-		"id": id,
+		"id": layerId,
 		"type": "line",
 		"source": {
 			"type": "geojson",
@@ -73,7 +95,7 @@ MapOnAppWebClient.prototype.createLineLayer = function (params, layerId) {
 				"properties": {},
 				"geometry": {
 					"type": "LineString",
-					"coordinates": coordinates || []
+					"coordinates": coordinates
 				}
 			}
 		},
@@ -86,6 +108,9 @@ MapOnAppWebClient.prototype.createLineLayer = function (params, layerId) {
 			"line-width": lineWidth
 		}
 	});
+	this.layers[layerId] = coordinates;
+	//this.layerData[layerData] = coordinates;
+	return layerId;
 };
 
 MapOnAppWebClient.prototype.getBrowserLocation = function () {
@@ -114,6 +139,11 @@ MapOnAppWebClient.prototype.loadMap = function () {
 	});
 	this.map.addControl(new mapboxgl.NavigationControl());
 	this.getBrowserLocation();
+	/*var adminLayers = ['admin-0-boundary', 'admin-1-boundary', 'admin-0-boundary-disputed',
+		'admin-1-boundary-bg', 'admin-0-boundary-bg'];
+	adminLayers.forEach((adminLayer) => {
+		this.map.setFilter(adminLayer, ["match", ["get", "worldview"], ["all", "IN"], true, false]);
+	});*/
 };
 
 MapOnAppWebClient.prototype.setUp = function () {
