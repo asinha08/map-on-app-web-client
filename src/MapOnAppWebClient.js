@@ -22,7 +22,7 @@ let isMapOnAppResourcesLoaded = false;
  *
  */
 
-function MapOnAppWebClient(container, token, checkBrowserLocation, baseURL = "http://localhost:2000/") {
+function MapOnAppWebClient(container, token, checkBrowserLocation, baseURL) {
 	this.Error = "MapOnApp ERROR: ";
 	if (!container) {
 		console.log(this.Error + "container is required");
