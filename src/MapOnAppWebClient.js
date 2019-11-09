@@ -8,7 +8,7 @@ let isMapOnAppResourcesLoaded = false;
  * @since 1.0.0
  * @category Map
  * @param {string} container in which map will be loaded.
- * @param {string} token is used to consume map api from MapOnApp (visit https://maponapp.com). Get the api token from your account.
+ * @param {string} apiKey is used to consume map api from MapOnApp (visit https://maponapp.com). Get the api key from your account.
  * @param {boolean} checkBrowserLocation is to get geo location of user's browser. using browser's geolocation api.
  * @param {string} baseURL is optional parameter. If you want to connect some other host to get map data.
  * @returns {null} Returns the rounded up number.
@@ -22,20 +22,20 @@ let isMapOnAppResourcesLoaded = false;
  *
  */
 
-function MapOnAppWebClient(container, token, checkBrowserLocation, baseURL) {
+function MapOnAppWebClient(container, apiKey, checkBrowserLocation, baseURL) {
 	this.Error = "MapOnApp ERROR: ";
 	if (!container) {
 		console.log(this.Error + "container is required");
 	}
-	if (!token) {
-		console.log(this.Error + "ERROR: token is required");
+	if (!apiKey) {
+		console.log(this.Error + "ERROR: API key is required");
 	}
 	if (checkBrowserLocation === undefined) {
 		console.warn()
 	}
 	this.checkBrowserLocation = checkBrowserLocation || false;
 	this.baseURL = baseURL || "https://maponapp.com/";
-	this.token = token;
+	window.localStorage.setItem("map_on_app_api_key", apiKey);
 	this.contains = container;
 	this.counter = 0;
 	this.layers = {};
@@ -46,6 +46,7 @@ function MapOnAppWebClient(container, token, checkBrowserLocation, baseURL) {
 		this.loadMap();
 	}
 }
+
 MapOnAppWebClient.prototype.pushCoordinatesToLineLayer = function (coordinates, layerId) {
 	if(!Array.isArray(coordinates)) {
 		console.error(this.Error + "coordinates is not a valid array");
@@ -132,7 +133,7 @@ MapOnAppWebClient.prototype.loadMap = function () {
 	}
 	this.map = new mapboxgl.Map({
 		container: this.contains,
-		style: this.baseURL + "map-api/dark/" + this.token + "/style",
+		style: this.baseURL + "map-api/dark/style",
 		hash: true,
 		zoom: 9,
 		center: [-121.8778, 37.8869]
